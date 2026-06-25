@@ -11,3 +11,12 @@ test('Login to hrm', async({page})=>{
     await expect(page.getByRole('link',{name:'Dashboard'})).toBeVisible();
 
 })
+
+test ('Unsuccesfull login',async({page})=>{
+    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
+    await page.getByRole('textbox',{name:'Username'}).fill('Admin');
+    await page.getByRole('textbox',{name:'Password'}).fill('admin122');
+    await page.getByRole('button',{name:'Login'}).click();
+
+    await expect(page.getByRole('alert').filter({hasText:'Invalid credentials'})).toBeVisible();
+})
