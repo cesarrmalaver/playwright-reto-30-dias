@@ -34,5 +34,10 @@ test('Check left menu options', async({page}) => {
 
     expect(currentMenuItems).toEqual(expectedMenuItems)
 
+    //se requiere asercion para identificar si el primer elemento del menu es Admin
+
+    const firstMenuItemElement = currentMenuItems[0]
+
+    expect(firstMenuItemElement).toEqual('Admin')
 
 })
