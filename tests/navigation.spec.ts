@@ -52,18 +52,31 @@ test('Navigate through the left panel', async ({page}) => {
     await expect(page.getByRole('link',{name:'Dashboard'})).toBeVisible();
 
     //Vamos a capturar el elemento de la lista
-    const leftMenuItems = page.getByLabel('Sidepanel').getByRole('listitem')
-    const currentMenuItemsCount = await leftMenuItems.count()
-    console.log ('Current menu items count',currentMenuItemsCount)
+    const currentMenuItemsCount = await page.getByLabel('Sidepanel').getByRole('listitem').count()
+    //console.log ('Current menu items count',currentMenuItemsCount)
 
     for(let i = 0; i< currentMenuItemsCount; i++){
-        const menuItem = leftMenuItems.nth(i)
-        const menuText = await menuItem.innerText()
+        
+        //Se vuelve a localizar el contenedor y el elemento i en cada recorrido del for
+        const menuItem = page.getByLabel('Sidepanel').getByRole('listitem').nth(i)
 
-        if(menuText !== 'Maintenance'){
-            await menuItem.click()
-        }    
-         
+        //Se espera que sea visible, principalmente luego de volver en la pagiga
+        await expect(menuItem).toBeVisible();
+        const menuText = await menuItem.innerText();
 
+        if(menuText == 'Maintenance'){
+            console.log(menuText,' ' ,i)
+            await menuItem.click();
+            await page.waitForLoadState('networkidle');
+            await page.goBack(); 
+
+            await expect(menuItem).toBeVisible();
+        }
+        else 
+            {
+                console.log(menuText,' ' ,i);
+                await menuItem.click();
+                await expect(menuItem).toBeVisible();
+            }
     }
 })
